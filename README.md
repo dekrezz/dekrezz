@@ -84,8 +84,8 @@ $ dekrezz --now
 
 ### `~/stats`
 
-<img height="165" src="https://github-readme-stats.vercel.app/api?username=dekrezz&show_icons=true&hide_border=true&include_all_commits=true&count_private=true&title_color=FF3B30&icon_color=FF3B30&text_color=c9d1d9&bg_color=0d1117" alt="stats" />
-<img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=dekrezz&layout=compact&hide_border=true&langs_count=8&title_color=FF3B30&text_color=c9d1d9&bg_color=0d1117" alt="top langs" />
+<img src="https://github-profile-summary-cards.vercel.app/api/cards/stats?username=dekrezz&theme=github_dark" alt="stats" />
+<img src="https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=dekrezz&theme=github_dark" alt="most used languages" />
 
 <img src="https://github-readme-streak-stats.herokuapp.com/?user=dekrezz&hide_border=true&background=0d1117&stroke=FF3B30&ring=FF3B30&fire=FF3B30&currStreakLabel=FF3B30&sideLabels=c9d1d9&dates=8b949e&currStreakNum=c9d1d9&sideNums=c9d1d9" alt="streak" />
 
