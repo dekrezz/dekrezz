@@ -7,7 +7,7 @@
 
 **`dekrezz`** &nbsp;·&nbsp; Fullstack Developer · AI Builder · Founder [@SavoliLabs](https://github.com/SavoliLabs)
 
-<img src="https://komarev.com/ghpvc/?username=dekrezz&color=FF3B30&style=flat-square&label=profile+views" alt="views" />
+<img src="https://komarev.com/ghpvc/?username=dekrezz&color=3FB950&style=flat-square&label=profile+views" alt="views" />
 
 </div>
 
@@ -17,7 +17,7 @@
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-0d1117?style=flat-square&logo=typescript&logoColor=3178C6)
 ![JavaScript](https://img.shields.io/badge/JavaScript-0d1117?style=flat-square&logo=javascript&logoColor=F7DF1E)
-![Rust](https://img.shields.io/badge/Rust-0d1117?style=flat-square&logo=rust&logoColor=FF3B30)
+![Rust](https://img.shields.io/badge/Rust-0d1117?style=flat-square&logo=rust&logoColor=FFFFFF)
 ![Go](https://img.shields.io/badge/Go-0d1117?style=flat-square&logo=go&logoColor=00ADD8)
 ![Swift](https://img.shields.io/badge/Swift-0d1117?style=flat-square&logo=swift&logoColor=F05138)
 ![Python](https://img.shields.io/badge/Python-0d1117?style=flat-square&logo=python&logoColor=FFD43B)
@@ -36,7 +36,7 @@
 ![Vercel](https://img.shields.io/badge/Vercel-0d1117?style=flat-square&logo=vercel&logoColor=FFFFFF)
 ![Docker](https://img.shields.io/badge/Docker-0d1117?style=flat-square&logo=docker&logoColor=2496ED)
 ![Telegram](https://img.shields.io/badge/Telegram%20Bots-0d1117?style=flat-square&logo=telegram&logoColor=26A5E4)
-![Claude](https://img.shields.io/badge/Claude%20%2F%20MCP-0d1117?style=flat-square&logo=anthropic&logoColor=FF3B30)
+![Claude](https://img.shields.io/badge/Claude%20%2F%20MCP-0d1117?style=flat-square&logo=anthropic&logoColor=FFFFFF)
 
 ---
 
@@ -67,7 +67,7 @@ $ dekrezz --now
 ### `~/contribution-world`
 
 <!-- 3D isometric contribution calendar — regenerated daily by GitHub Actions -->
-<img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/profile-3d-contrib/profile-night-rainbow.svg" width="90%" alt="3D contribution calendar" />
+<img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/profile-3d-contrib/profile-night-green.svg" width="90%" alt="3D contribution calendar" />
 
 <!-- red snake eating the contribution grid — regenerated every 12h -->
 <picture>
@@ -81,7 +81,7 @@ $ dekrezz --now
 <img src="https://github-profile-summary-cards.vercel.app/api/cards/stats?username=dekrezz&theme=github_dark" alt="stats" />
 <img src="https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=dekrezz&theme=github_dark" alt="most used languages" />
 
-<img width="100%" src="https://github-readme-activity-graph.vercel.app/graph?username=dekrezz&bg_color=0d1117&color=FF3B30&line=FF3B30&point=FFFFFF&area=true&area_color=FF3B30&hide_border=true" alt="activity graph" />
+<img width="100%" src="https://github-readme-activity-graph.vercel.app/graph?username=dekrezz&bg_color=0d1117&color=3FB950&line=3FB950&point=FFFFFF&area=true&area_color=3FB950&hide_border=true" alt="activity graph" />
 
 </div>
 

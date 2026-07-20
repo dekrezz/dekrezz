@@ -1,22 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 440" width="840" height="440" font-family="'SFMono-Regular', 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace" role="img" aria-label="dekrezz terminal">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 500" width="840" height="500" font-family="Menlo, 'SF Mono', Monaco, Consolas, 'Liberation Mono', monospace" role="img" aria-label="dekrezz terminal">
   <defs>
-    <!-- window clip (rounded) so scanline & content stay inside -->
-    <clipPath id="win"><rect x="8" y="8" width="824" height="424" rx="14"/></clipPath>
+    <clipPath id="win"><rect x="8" y="8" width="824" height="484" rx="14"/></clipPath>
 
-    <!-- neon red glow -->
+    <!-- neon green glow -->
     <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
       <feGaussianBlur stdDeviation="2.4" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
 
-    <!-- vertical vignette for depth -->
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#0c1018"/>
       <stop offset="1" stop-color="#070a10"/>
     </linearGradient>
-    <radialGradient id="redglow" cx="0.5" cy="0" r="1">
-      <stop offset="0" stop-color="#ff3b30" stop-opacity="0.10"/>
-      <stop offset="0.55" stop-color="#ff3b30" stop-opacity="0"/>
+    <radialGradient id="topglow" cx="0.5" cy="0" r="1">
+      <stop offset="0" stop-color="#3fb950" stop-opacity="0.10"/>
+      <stop offset="0.55" stop-color="#3fb950" stop-opacity="0"/>
     </radialGradient>
 
     <!-- per-line typing masks: width grows left -> right -->
@@ -31,9 +29,9 @@
   </defs>
 
   <!-- window -->
-  <rect x="8" y="8" width="824" height="424" rx="14" fill="url(#bg)" stroke="#ff3b30" stroke-opacity="0.28"/>
+  <rect x="8" y="8" width="824" height="484" rx="14" fill="url(#bg)" stroke="#3fb950" stroke-opacity="0.28"/>
   <g clip-path="url(#win)">
-    <rect x="8" y="8" width="824" height="180" fill="url(#redglow)"/>
+    <rect x="8" y="8" width="824" height="180" fill="url(#topglow)"/>
 
     <!-- title bar -->
     <rect x="8" y="8" width="824" height="40" fill="#0a0d14"/>
@@ -41,33 +39,28 @@
     <circle cx="58" cy="28" r="7" fill="#febc2e"/>
     <circle cx="82" cy="28" r="7" fill="#27c93f"/>
     <text x="420" y="33" text-anchor="middle" font-size="13" fill="#6e7681">zsh — dekrezz@savolilabs — ~/profile</text>
-    <!-- live indicator -->
-    <circle cx="784" cy="28" r="5" fill="#ff3b30" filter="url(#glow)">
-      <animate attributeName="opacity" values="1;0.25;1" dur="1.6s" repeatCount="indefinite"/>
-    </circle>
-    <text x="798" y="32" font-size="11" fill="#ff6b6b">LIVE</text>
     <line x1="8" y1="48" x2="832" y2="48" stroke="#161b22"/>
 
     <!-- ===== typed session ===== -->
     <!-- L1: whoami -->
     <g clip-path="url(#t1)"><text x="34" y="94" font-size="18">
-      <tspan fill="#ff3b30" filter="url(#glow)">❯</tspan><tspan fill="#56b6c2"> ~</tspan><tspan fill="#e6edf3">  whoami</tspan>
+      <tspan fill="#3fb950" filter="url(#glow)">❯</tspan><tspan fill="#56b6c2"> ~</tspan><tspan fill="#e6edf3">  whoami</tspan>
     </text></g>
     <g clip-path="url(#t2)"><text x="34" y="128" font-size="16">
-      <tspan fill="#3fb950">dekrezz</tspan><tspan fill="#7d8590"> — fullstack developer · ai builder · founder </tspan><tspan fill="#ff6b6b">@savolilabs</tspan>
+      <tspan fill="#3fb950">dekrezz</tspan><tspan fill="#7d8590"> — fullstack developer · ai builder · founder </tspan><tspan fill="#3fb950">@savolilabs</tspan>
     </text></g>
 
     <!-- L2: stack -->
     <g clip-path="url(#t3)"><text x="34" y="172" font-size="18">
-      <tspan fill="#ff3b30" filter="url(#glow)">❯</tspan><tspan fill="#56b6c2"> ~</tspan><tspan fill="#e6edf3">  cat stack.txt</tspan>
+      <tspan fill="#3fb950" filter="url(#glow)">❯</tspan><tspan fill="#56b6c2"> ~</tspan><tspan fill="#e6edf3">  cat stack.txt</tspan>
     </text></g>
     <g clip-path="url(#t4)"><text x="34" y="206" font-size="16" fill="#c9d1d9">
-      <tspan fill="#ff6b6b">rust</tspan> · <tspan fill="#ff6b6b">go</tspan> · <tspan fill="#ff6b6b">typescript</tspan> · <tspan fill="#ff6b6b">swift</tspan> · <tspan fill="#ff6b6b">python</tspan> · sql · bash
+      <tspan fill="#3fb950">rust</tspan> · <tspan fill="#3fb950">go</tspan> · <tspan fill="#3fb950">typescript</tspan> · <tspan fill="#3fb950">swift</tspan> · <tspan fill="#3fb950">python</tspan> · sql · bash
     </text></g>
 
     <!-- L3: now -->
     <g clip-path="url(#t5)"><text x="34" y="250" font-size="18">
-      <tspan fill="#ff3b30" filter="url(#glow)">❯</tspan><tspan fill="#56b6c2"> ~</tspan><tspan fill="#e6edf3">  ./run --now</tspan>
+      <tspan fill="#3fb950" filter="url(#glow)">❯</tspan><tspan fill="#56b6c2"> ~</tspan><tspan fill="#e6edf3">  ./run --now</tspan>
     </text></g>
     <g clip-path="url(#t6)"><text x="34" y="284" font-size="16" fill="#7d8590">
       <tspan fill="#3fb950">▸</tspan> building MCP servers &amp; multi-agent orchestration systems
@@ -75,7 +68,7 @@
 
     <!-- L4: motto -->
     <g clip-path="url(#t7)"><text x="34" y="328" font-size="18">
-      <tspan fill="#ff3b30" filter="url(#glow)">❯</tspan><tspan fill="#56b6c2"> ~</tspan><tspan fill="#e6edf3">  echo $MOTTO</tspan>
+      <tspan fill="#3fb950" filter="url(#glow)">❯</tspan><tspan fill="#56b6c2"> ~</tspan><tspan fill="#e6edf3">  echo $MOTTO</tspan>
     </text></g>
     <g clip-path="url(#t8)"><text x="34" y="362" font-size="16" fill="#7d8590">
       ship fast · <tspan fill="#e6edf3">verify everything</tspan> · no silent fallbacks
@@ -83,17 +76,24 @@
 
     <!-- final prompt + blinking block cursor -->
     <text x="34" y="404" font-size="18" opacity="0">
-      <tspan fill="#ff3b30" filter="url(#glow)">❯</tspan><tspan fill="#56b6c2"> ~</tspan>
+      <tspan fill="#3fb950" filter="url(#glow)">❯</tspan><tspan fill="#56b6c2"> ~</tspan>
       <animate attributeName="opacity" from="0" to="1" begin="7.6s" dur="0.2s" fill="freeze"/>
     </text>
-    <rect x="72" y="390" width="11" height="20" fill="#ff3b30" opacity="0">
+    <rect x="72" y="390" width="11" height="20" fill="#3fb950" opacity="0">
       <animate attributeName="opacity" from="0" to="1" begin="7.6s" dur="0.01s" fill="freeze"/>
       <animate attributeName="opacity" values="1;1;0;0" dur="1.05s" begin="7.8s" repeatCount="indefinite"/>
     </rect>
 
+    <!-- nickname signature at the bottom -->
+    <line x1="34" y1="436" x2="806" y2="436" stroke="#161b22"/>
+    <text x="420" y="474" text-anchor="middle" font-size="30" letter-spacing="6" font-weight="bold" fill="#3fb950" filter="url(#glow)" opacity="0">
+      dekrezz
+      <animate attributeName="opacity" from="0" to="1" begin="7.9s" dur="0.6s" fill="freeze"/>
+    </text>
+
     <!-- CRT scanline sweeping down -->
     <rect x="8" width="824" height="80" fill="#ffffff" opacity="0.025">
-      <animate attributeName="y" values="-80;440" dur="5.5s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="-80;500" dur="5.5s" repeatCount="indefinite"/>
     </rect>
   </g>
 </svg>
