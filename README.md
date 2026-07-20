@@ -1,29 +1,11 @@
 <div align="center">
 
-<!-- ░░░ ANIMATED HEADER ░░░ -->
-<a href="https://github.com/dekrezz">
-  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=26&duration=3000&pause=800&color=FF3B30&center=true&vCenter=true&width=820&height=64&lines=I+code+in+TypeScript%2C+Rust%2C+Go%2C+Swift+%26+Python;Building+MCP+servers+%26+multi-agent+systems;Founder+%40+SavoliLabs;Ship+fast.+Verify+everything." alt="What I code" />
-</a>
+<!-- ░░░ HAND-WRITTEN ANIMATED TERMINAL (typed line-by-line, blinking cursor, CRT scanline) ░░░ -->
+<img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/terminal.svg" alt="dekrezz — animated terminal" width="82%" />
 
-</div>
+<br/>
 
-```text
-██████╗ ███████╗██╗  ██╗██████╗ ███████╗███████╗███████╗
-██╔══██╗██╔════╝██║ ██╔╝██╔══██╗██╔════╝╚══███╔╝╚══███╔╝
-██║  ██║█████╗  █████╔╝ ██████╔╝█████╗    ███╔╝   ███╔╝
-██║  ██║██╔══╝  ██╔═██╗ ██╔══██╗██╔══╝   ███╔╝   ███╔╝
-██████╔╝███████╗██║  ██╗██║  ██║███████╗███████╗███████╗
-╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
-
- > fullstack developer · ai builder · founder @ savolilabs
- > $ whoami --stack rust,go,ts,swift,python  --focus agents,mcp
-```
-
-<div align="center">
-
-### `dekrezz`
-
-**Fullstack Developer · AI Builder · Founder [@SavoliLabs](https://github.com/SavoliLabs)**
+**`dekrezz`** &nbsp;·&nbsp; Fullstack Developer · AI Builder · Founder [@SavoliLabs](https://github.com/SavoliLabs)
 
 <img src="https://komarev.com/ghpvc/?username=dekrezz&color=FF3B30&style=flat-square&label=profile+views" alt="views" />
 
@@ -74,7 +56,7 @@ $ dekrezz --now
 
 - ⚡ **[delegator-mcp](https://github.com/dekrezz/delegator-mcp)** — MCP server & async task orchestrator for multi-agent workflows *(TypeScript)*
 - 🔁 **[ultraloop](https://github.com/dekrezz/ultraloop)** — agent skill: a task is done only when verified & actually works *(Claude Code · Codex · Cursor)*
-- 🖥️ **[rc](https://github.com/dekrezz/rc)** — cross-platform remote-control MCP server with an E2E-encrypted transfer *(Rust)*
+- 🖥️ **[rc](https://github.com/dekrezz/rc)** — cross-platform remote-control MCP server with E2E-encrypted transfer *(Rust)*
 - 🔊 **Auralis** — a Jarvis-style voice controller for macOS *(Rust + Swift)*
 - 🛠️ **[updatetools](https://github.com/dekrezz/updatetools)** — one command to update everything on your Mac, animated TUI
 
@@ -82,12 +64,22 @@ $ dekrezz --now
 
 <div align="center">
 
+### `~/contribution-world`
+
+<!-- 3D isometric contribution calendar — regenerated daily by GitHub Actions -->
+<img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/profile-3d-contrib/profile-night-rainbow.svg" width="90%" alt="3D contribution calendar" />
+
+<!-- red snake eating the contribution grid — regenerated every 12h -->
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/output/snake-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/output/snake-light.svg" />
+  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/output/snake-dark.svg" width="90%" alt="contribution snake" />
+</picture>
+
 ### `~/stats`
 
 <img src="https://github-profile-summary-cards.vercel.app/api/cards/stats?username=dekrezz&theme=github_dark" alt="stats" />
 <img src="https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=dekrezz&theme=github_dark" alt="most used languages" />
-
-<img src="https://github-readme-streak-stats.herokuapp.com/?user=dekrezz&hide_border=true&background=0d1117&stroke=FF3B30&ring=FF3B30&fire=FF3B30&currStreakLabel=FF3B30&sideLabels=c9d1d9&dates=8b949e&currStreakNum=c9d1d9&sideNums=c9d1d9" alt="streak" />
 
 <img width="100%" src="https://github-readme-activity-graph.vercel.app/graph?username=dekrezz&bg_color=0d1117&color=FF3B30&line=FF3B30&point=FFFFFF&area=true&area_color=FF3B30&hide_border=true" alt="activity graph" />
 
