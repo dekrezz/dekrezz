@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 500" width="840" height="500" font-family="Menlo, 'SF Mono', Monaco, Consolas, 'Liberation Mono', monospace" role="img" aria-label="dekrezz terminal">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 440" width="840" height="440" font-family="Menlo, 'SF Mono', Monaco, Consolas, 'Liberation Mono', monospace" role="img" aria-label="dekrezz terminal">
   <defs>
-    <clipPath id="win"><rect x="8" y="8" width="824" height="484" rx="14"/></clipPath>
+    <clipPath id="win"><rect x="8" y="8" width="824" height="424" rx="14"/></clipPath>
 
     <!-- neon green glow -->
     <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
@@ -29,7 +29,7 @@
   </defs>
 
   <!-- window -->
-  <rect x="8" y="8" width="824" height="484" rx="14" fill="url(#bg)" stroke="#3fb950" stroke-opacity="0.28"/>
+  <rect x="8" y="8" width="824" height="424" rx="14" fill="url(#bg)" stroke="#3fb950" stroke-opacity="0.28"/>
   <g clip-path="url(#win)">
     <rect x="8" y="8" width="824" height="180" fill="url(#topglow)"/>
 
@@ -38,7 +38,7 @@
     <circle cx="34" cy="28" r="7" fill="#ff5f56"/>
     <circle cx="58" cy="28" r="7" fill="#febc2e"/>
     <circle cx="82" cy="28" r="7" fill="#27c93f"/>
-    <text x="420" y="33" text-anchor="middle" font-size="13" fill="#6e7681">zsh — dekrezz@savolilabs — ~/profile</text>
+    <text x="420" y="33" text-anchor="middle" font-size="13" fill="#8b949e">https://github.com/dekrezz</text>
     <line x1="8" y1="48" x2="832" y2="48" stroke="#161b22"/>
 
     <!-- ===== typed session ===== -->
@@ -82,18 +82,6 @@
     <rect x="72" y="390" width="11" height="20" fill="#3fb950" opacity="0">
       <animate attributeName="opacity" from="0" to="1" begin="7.6s" dur="0.01s" fill="freeze"/>
       <animate attributeName="opacity" values="1;1;0;0" dur="1.05s" begin="7.8s" repeatCount="indefinite"/>
-    </rect>
-
-    <!-- nickname signature at the bottom -->
-    <line x1="34" y1="436" x2="806" y2="436" stroke="#161b22"/>
-    <text x="420" y="474" text-anchor="middle" font-size="30" letter-spacing="6" font-weight="bold" fill="#3fb950" filter="url(#glow)" opacity="0">
-      dekrezz
-      <animate attributeName="opacity" from="0" to="1" begin="7.9s" dur="0.6s" fill="freeze"/>
-    </text>
-
-    <!-- CRT scanline sweeping down -->
-    <rect x="8" width="824" height="80" fill="#ffffff" opacity="0.025">
-      <animate attributeName="y" values="-80;500" dur="5.5s" repeatCount="indefinite"/>
     </rect>
   </g>
 </svg>
