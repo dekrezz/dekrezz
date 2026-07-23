@@ -1,9 +1,6 @@
 <div align="center">
 
-<!-- ░░░ HAND-WRITTEN ANIMATED TERMINAL (typed line-by-line, blinking cursor, CRT scanline) ░░░ -->
-<img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/terminal.svg" alt="dekrezz — animated terminal" width="82%" />
-
-<img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/nick.svg" alt="dekrezz" width="58%" />
+<img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/nick.svg" alt="dekrezz" width="66%" />
 
 **Fullstack Developer · AI Builder · Founder [@SavoliLabs](https://github.com/SavoliLabs)**
 
