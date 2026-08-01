@@ -10,7 +10,9 @@
 
 ---
 
-### `~/languages`
+### Languages
+
+<sub>what I write in</sub>
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-0d1117?style=flat-square&logo=typescript&logoColor=3178C6)
 ![JavaScript](https://img.shields.io/badge/JavaScript-0d1117?style=flat-square&logo=javascript&logoColor=F7DF1E)
@@ -21,7 +23,9 @@
 ![SQL](https://img.shields.io/badge/SQL-0d1117?style=flat-square&logo=postgresql&logoColor=4169E1)
 ![Bash](https://img.shields.io/badge/Bash-0d1117?style=flat-square&logo=gnubash&logoColor=4EAA25)
 
-### `~/stack`
+### Stack
+
+<sub>what I build with</sub>
 
 ![Node.js](https://img.shields.io/badge/Node.js-0d1117?style=flat-square&logo=nodedotjs&logoColor=339933)
 ![Bun](https://img.shields.io/badge/Bun-0d1117?style=flat-square&logo=bun&logoColor=FBF0DF)
@@ -37,7 +41,9 @@
 
 ---
 
-### `~/now`
+### Now
+
+<sub>current focus</sub>
 
 ```console
 $ dekrezz --now
@@ -49,7 +55,9 @@ $ dekrezz --now
   Motto    ship fast, verify everything, no silent fallbacks
 ```
 
-### `~/highlights`
+### Highlights
+
+<sub>things I made</sub>
 
 - ⚡ **[delegator-mcp](https://github.com/dekrezz/delegator-mcp)** — MCP server & async task orchestrator for multi-agent workflows *(TypeScript)*
 - 🔁 **[ultraloop](https://github.com/dekrezz/ultraloop)** — agent skill: a task is done only when verified & actually works *(Claude Code · Codex · Cursor)*
@@ -61,7 +69,9 @@ $ dekrezz --now
 
 <div align="center">
 
-### `~/contribution-world`
+### Contributions
+
+<sub>a year in commits</sub>
 
 <!-- 3D isometric contribution calendar — regenerated daily by GitHub Actions -->
 <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/profile-3d-contrib/profile-night-green.svg" width="90%" alt="3D contribution calendar" />
@@ -73,7 +83,9 @@ $ dekrezz --now
   <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/output/snake-dark.svg" width="90%" alt="contribution snake" />
 </picture>
 
-### `~/stats`
+### Stats
+
+<sub>the numbers</sub>
 
 <img src="https://github-profile-summary-cards.vercel.app/api/cards/stats?username=dekrezz&theme=github_dark" alt="stats" />
 <img src="https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=dekrezz&theme=github_dark" alt="most used languages" />
