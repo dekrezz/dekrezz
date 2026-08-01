@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/nick.svg" alt="dekrezz" width="66%" />
 
-**Fullstack Developer · AI Builder · Founder [@SavoliLabs](https://github.com/SavoliLabs)**
+**Fullstack Developer · AI Builder**
 
 <img src="https://komarev.com/ghpvc/?username=dekrezz&color=3FB950&style=flat-square&label=profile+views" alt="views" />
 
@@ -42,7 +42,7 @@
 ```console
 $ dekrezz --now
 
-  Now      Founder @ SavoliLabs — building agent infra & MCP tooling
+  Now      building agent infra & MCP tooling
   Focus    multi-agent orchestration · MCP servers · dev tooling
   Stack    Rust · Go · TypeScript · Swift · Python
   Cloud    Supabase · Vercel · Docker
