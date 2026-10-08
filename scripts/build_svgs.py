@@ -93,64 +93,61 @@ def svg(name, h, body, title):
         )
 
 
+# ---------- logo ----------
+def mark(x, y, size, fill):
+    """Monogram 'd': ring + stem, cut from a square grid of `size`."""
+    u = size / 24
+    return (f'<g transform="translate({x} {y}) scale({u})" fill="{fill}">'
+            '<path fill-rule="evenodd" d="M10 6a9 9 0 1 0 0 18a9 9 0 1 0 0-18zm0 4.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 1 1 0-9z"/>'
+            '<rect x="15" y="0" width="4.5" height="24" rx="0"/></g>')
+
+
+def logo(c):
+    return mark(0, 0, 40, c["fg"]) + text(SANS_MED, "dekrezz", 30, 54, 31, c["fg"], -0.03)
+
+
+for theme, c in THEMES.items():
+    (OUT / f"logo-{theme}.svg").write_text(
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" role="img" '
+        f'aria-label="dekrezz logo"><title>dekrezz</title>{mark(0, 0, 40, c["fg"])}</svg>\n')
+
+
 # ---------- hero ----------
 HEAD = ["Agent infrastructure,", "MCP tooling & dev tools."]
 HEAD_SIZE, HEAD_TRACK, HEAD_LH = 54, -0.045, 60
 
 
 def hero(c):
-    out = [
-        text(MONO, "DEKREZZ", 12, 0, 20, c["fg"], 0.08),
-        text(MONO, "FULLSTACK DEVELOPER · AI BUILDER", 12, W, 20, c["muted"], 0.08, "end"),
-        f'<rect x="0" y="40" width="{W}" height="1" fill="{c["line"]}"/>',
-    ]
-    y = 128
+    out = [logo(c), f'<rect x="0" y="68" width="{W}" height="1" fill="{c["line"]}"/>']
+    y = 156
     for line in HEAD:
         out.append(text(SANS, line, HEAD_SIZE, -2, y, c["fg"], HEAD_TRACK))
         y += HEAD_LH
     y += 8
-    for line in ["I build tools for coding agents — orchestration, MCP servers, voice and", "desktop utilities. Ship fast, verify everything."]:
+    for line in ["I build tools for coding agents — orchestration, MCP servers, voice and",
+                 "desktop utilities. TypeScript, Rust, Go, Swift, Python."]:
         out.append(text(SANS, line, 18, 0, y, c["muted"], -0.01))
         y += 28
+    out.append(f'<rect x="0" y="{y + 20}" width="{W}" height="1" fill="{c["line"]}"/>')
     return "".join(out)
 
 
-svg("hero", 330, hero, "dekrezz — Agent infrastructure, MCP tooling and dev tools")
-
-
-# ---------- section label ----------
-def section(name, num, label, right):
-    def body(c):
-        return "".join([
-            text(MONO, f"{num}", 12, 0, 36, c["muted"], 0.08),
-            text(MONO, label.upper(), 12, 40, 36, c["fg"], 0.08),
-            text(MONO, right.upper(), 12, W, 36, c["muted"], 0.08, "end"),
-            f'<rect x="0" y="55" width="{W}" height="1" fill="{c["line"]}"/>',
-        ])
-    svg(name, 56, body, label)
-
-
-section("section-work", "01", "Selected work", "github.com/dekrezz")
-section("section-stack", "02", "Stack", "tools I use daily")
+svg("hero", 361, hero, "dekrezz — Agent infrastructure, MCP tooling and dev tools")
 
 # ---------- project rows ----------
 PROJECTS = [
-    ("dewhispr", "Voice-to-text dictation — local Parakeet/Whisper or cloud models, BYOK.", "JavaScript"),
-    ("updatetools", "One command to update everything on your Mac, without closing apps.", "Shell"),
-    ("FreeDeepseekAPI", "DeepSeek as an API for your apps and coding agents, no bills.", "JavaScript"),
-    ("Binder", "On-screen keybinder addon for Minecraft Bedrock 1.26.x.", "JavaScript"),
+    ("FreeDeepseekAPI", "DeepSeek as an API for your apps and coding agents, no bills."),
+    ("updatetools", "One command to update everything on your Mac, without closing apps."),
 ]
 
 
-def project(name, desc, lang):
+def project(name, desc):
     def body(c):
-        arrow_x = W - 4
+        ax = W - 4
         return "".join([
             text(SANS_MED, name, 22, 0, 40, c["fg"], -0.02),
             text(SANS, desc, 15, 0, 66, c["muted"], -0.005),
-            text(MONO, lang.upper(), 11, W - 30, 38, c["muted"], 0.08, "end"),
-            # ↗ arrow, drawn so it doesn't depend on glyph coverage
-            f'<path d="M{arrow_x - 11} 38 L{arrow_x} 27 M{arrow_x - 8} 27 L{arrow_x} 27 L{arrow_x} 35" '
+            f'<path d="M{ax - 11} 38 L{ax} 27 M{ax - 8} 27 L{ax} 27 L{ax} 35" '
             f'stroke="{c["fg"]}" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
             f'<rect x="0" y="91" width="{W}" height="1" fill="{c["line"]}"/>',
         ])
@@ -159,30 +156,4 @@ def project(name, desc, lang):
 
 for p in PROJECTS:
     project(*p)
-
-# ---------- stack ----------
-STACK = [
-    ("Languages", "TypeScript, Rust, Go, Swift, Python, SQL, Bash"),
-    ("Runtime", "Node.js, Bun, Next.js, React, Tailwind"),
-    ("Data & infra", "Supabase, PostgreSQL, Vercel, Docker"),
-    ("AI", "Claude, MCP servers, multi-agent orchestration, Telegram bots"),
-]
-
-
-def stack(c):
-    out, y = [], 0
-    col = 220
-    for label, vals in STACK:
-        lines = wrap(SANS, vals, 18, W - col, -0.01)
-        out.append(text(MONO, label.upper(), 11, 0, y + 37, c["muted"], 0.08))
-        ly = y + 40
-        for ln in lines:
-            out.append(text(SANS, ln, 18, col, ly, c["fg"], -0.01))
-            ly += 28
-        y = ly - 28 + 28
-        out.append(f'<rect x="0" y="{y}" width="{W}" height="1" fill="{c["line"]}"/>')
-    return "".join(out)
-
-
-svg("stack", 4 * 68 + 1, stack, "Stack: " + "; ".join(f"{a}: {b}" for a, b in STACK))
 print("ok", sorted(p.name for p in OUT.iterdir()))
