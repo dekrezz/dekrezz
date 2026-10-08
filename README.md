@@ -1,103 +1,49 @@
-<div align="center">
-
-<img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/nick.svg" alt="dekrezz" width="66%" />
-
-**Fullstack Developer · AI Builder**
-
-<img src="https://komarev.com/ghpvc/?username=dekrezz&color=3FB950&style=flat-square&label=profile+views" alt="views" />
-
-</div>
-
----
-
-### Languages
-
-<sub>what I write in</sub>
-
-![TypeScript](https://img.shields.io/badge/TypeScript-0d1117?style=flat-square&logo=typescript&logoColor=3178C6)
-![JavaScript](https://img.shields.io/badge/JavaScript-0d1117?style=flat-square&logo=javascript&logoColor=F7DF1E)
-![Rust](https://img.shields.io/badge/Rust-0d1117?style=flat-square&logo=rust&logoColor=FFFFFF)
-![Go](https://img.shields.io/badge/Go-0d1117?style=flat-square&logo=go&logoColor=00ADD8)
-![Swift](https://img.shields.io/badge/Swift-0d1117?style=flat-square&logo=swift&logoColor=F05138)
-![Python](https://img.shields.io/badge/Python-0d1117?style=flat-square&logo=python&logoColor=FFD43B)
-![SQL](https://img.shields.io/badge/SQL-0d1117?style=flat-square&logo=postgresql&logoColor=4169E1)
-![Bash](https://img.shields.io/badge/Bash-0d1117?style=flat-square&logo=gnubash&logoColor=4EAA25)
-
-### Stack
-
-<sub>what I build with</sub>
-
-![Node.js](https://img.shields.io/badge/Node.js-0d1117?style=flat-square&logo=nodedotjs&logoColor=339933)
-![Bun](https://img.shields.io/badge/Bun-0d1117?style=flat-square&logo=bun&logoColor=FBF0DF)
-![Next.js](https://img.shields.io/badge/Next.js-0d1117?style=flat-square&logo=nextdotjs&logoColor=FFFFFF)
-![React](https://img.shields.io/badge/React-0d1117?style=flat-square&logo=react&logoColor=61DAFB)
-![Tailwind](https://img.shields.io/badge/Tailwind-0d1117?style=flat-square&logo=tailwindcss&logoColor=06B6D4)
-![Supabase](https://img.shields.io/badge/Supabase-0d1117?style=flat-square&logo=supabase&logoColor=3FCF8E)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-0d1117?style=flat-square&logo=postgresql&logoColor=4169E1)
-![Vercel](https://img.shields.io/badge/Vercel-0d1117?style=flat-square&logo=vercel&logoColor=FFFFFF)
-![Docker](https://img.shields.io/badge/Docker-0d1117?style=flat-square&logo=docker&logoColor=2496ED)
-![Telegram](https://img.shields.io/badge/Telegram%20Bots-0d1117?style=flat-square&logo=telegram&logoColor=26A5E4)
-![Claude](https://img.shields.io/badge/Claude%20%2F%20MCP-0d1117?style=flat-square&logo=anthropic&logoColor=FFFFFF)
-
----
-
-### Now
-
-<sub>current focus</sub>
-
-```console
-$ dekrezz --now
-
-  Now      building agent infra & MCP tooling
-  Focus    multi-agent orchestration · MCP servers · dev tooling
-  Stack    Rust · Go · TypeScript · Swift · Python
-  Cloud    Supabase · Vercel · Docker
-  Motto    ship fast, verify everything, no silent fallbacks
-```
-
-### Highlights
-
-<sub>things I made</sub>
-
-- ⚡ **[delegator-mcp](https://github.com/dekrezz/delegator-mcp)** — MCP server & async task orchestrator for multi-agent workflows *(TypeScript)*
-- 🔁 **[ultraloop](https://github.com/dekrezz/ultraloop)** — agent skill: a task is done only when verified & actually works *(Claude Code · Codex · Cursor)*
-- 🖥️ **[rc](https://github.com/dekrezz/rc)** — cross-platform remote-control MCP server with E2E-encrypted transfer *(Rust)*
-- 🔊 **Auralis** — a Jarvis-style voice controller for macOS *(Rust + Swift)*
-- 🛠️ **[updatetools](https://github.com/dekrezz/updatetools)** — one command to update everything on your Mac, animated TUI
-
----
-
-<div align="center">
-
-### Contributions
-
-<sub>a year in commits</sub>
-
-<!-- 3D isometric contribution calendar — regenerated daily by GitHub Actions -->
-<img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/profile-3d-contrib/profile-night-green.svg" width="90%" alt="3D contribution calendar" />
-
-<!-- red snake eating the contribution grid — regenerated every 12h -->
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/output/snake-dark.svg" />
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/output/snake-light.svg" />
-  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/output/snake-dark.svg" width="90%" alt="contribution snake" />
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/hero-dark.svg" />
+  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/hero-light.svg" width="100%" alt="dekrezz — agent infrastructure, MCP tooling and dev tools" />
 </picture>
 
-### Stats
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/section-work-dark.svg" />
+  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/section-work-light.svg" width="100%" alt="01 Selected work" />
+</picture>
 
-<sub>the numbers</sub>
+<a href="https://github.com/dekrezz/dewhispr">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/work-dewhispr-dark.svg" />
+  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/work-dewhispr-light.svg" width="100%" alt="dewhispr — voice-to-text dictation" />
+</picture>
+</a>
 
-<img src="https://github-profile-summary-cards.vercel.app/api/cards/stats?username=dekrezz&theme=github_dark" alt="stats" />
-<img src="https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=dekrezz&theme=github_dark" alt="most used languages" />
+<a href="https://github.com/dekrezz/updatetools">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/work-updatetools-dark.svg" />
+  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/work-updatetools-light.svg" width="100%" alt="updatetools — update everything on your Mac" />
+</picture>
+</a>
 
-<img width="100%" src="https://github-readme-activity-graph.vercel.app/graph?username=dekrezz&bg_color=0d1117&color=3FB950&line=3FB950&point=FFFFFF&area=true&area_color=3FB950&hide_border=true" alt="activity graph" />
+<a href="https://github.com/dekrezz/FreeDeepseekAPI">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/work-freedeepseekapi-dark.svg" />
+  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/work-freedeepseekapi-light.svg" width="100%" alt="FreeDeepseekAPI — DeepSeek as an API" />
+</picture>
+</a>
 
-</div>
+<a href="https://github.com/dekrezz/Binder">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/work-binder-dark.svg" />
+  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/work-binder-light.svg" width="100%" alt="Binder — keybinder addon for Minecraft Bedrock" />
+</picture>
+</a>
 
----
+<br />
 
-<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/section-stack-dark.svg" />
+  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/section-stack-light.svg" width="100%" alt="02 Stack" />
+</picture>
 
-<sub>`$ echo "thanks for stopping by" && exit 0`</sub>
-
-</div>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/stack-dark.svg" />
+  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/stack-light.svg" width="100%" alt="Stack: TypeScript, Rust, Go, Swift, Python, Node.js, Bun, Next.js, React, Supabase, PostgreSQL, Vercel, Docker, Claude, MCP" />
+</picture>
