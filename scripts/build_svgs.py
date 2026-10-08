@@ -53,7 +53,7 @@ def fetch_stats():
         q = """query($c: String) { viewer {
             repositories(ownerAffiliations: OWNER, first: 100, after: $c) {
               totalCount pageInfo { hasNextPage endCursor }
-              nodes { isFork languages(first: 20) { edges { size node { name } } } } }
+              nodes { isFork languages(first: 20) { edges { size node { name color } } } } }
             contributionsCollection { contributionCalendar { totalContributions } } } }"""
         v = gh("graphql", {"query": q, "variables": {"c": cursor}})["data"]["viewer"]
         page = v["repositories"]
@@ -62,11 +62,12 @@ def fetch_stats():
             break
         cursor = page["pageInfo"]["endCursor"]
 
-    langs = collections.Counter()
+    langs, colors = collections.Counter(), {}
     for r in repos:
         if not r["isFork"]:
             for e in r["languages"]["edges"]:
                 langs[e["node"]["name"]] += e["size"]
+                colors[e["node"]["name"]] = e["node"]["color"]
 
     # GraphQL hides private commits as "restricted"; search with a `repo` token counts them.
     return {
@@ -75,6 +76,7 @@ def fetch_stats():
         "prs": gh(f"search/issues?q=author:{USER}+type:pr")["total_count"],
         "repos": page["totalCount"],
         "langs": langs,
+        "colors": colors,
     }
 
 
@@ -141,6 +143,7 @@ FILES = {}  # (name, theme) -> filename; content hash in the name busts GitHub's
 def svg(name, h, body, title):
     title = escape(title)
     for theme, c in THEMES.items():
+        c = {**c, "theme": theme}
         doc = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{h}" viewBox="0 0 {W} {h}" '
                f'role="img" aria-label="{title}"><title>{title}</title>{body(c)}</svg>\n')
         fn = f"{name}-{theme}-{hashlib.sha1(doc.encode()).hexdigest()[:8]}.svg"
@@ -150,8 +153,8 @@ def svg(name, h, body, title):
 
 # ---------- sections ----------
 def hero(c):
-    out = [text(SANS_MED, "dekrezz", 30, 0, 31, c["fg"], -0.03), rule(68, c)]
-    y = 156
+    out = []
+    y = 56
     for line in ["Agent infrastructure,", "MCP tooling & dev tools."]:
         out.append(text(SANS, line, 54, -2, y, c["fg"], -0.045))
         y += 60
@@ -203,7 +206,25 @@ def icon_path(lang):
     return re.search(r'<path d="([^"]+)"', (ICONS_DIR / f"{slug}.svg").read_text()).group(1)
 
 
-def langs_svg(langs, top=8):
+def luminance(hex_):
+    r, g, b = (int(hex_[i:i + 2], 16) / 255 for i in (1, 3, 5))
+    lin = lambda v: v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4
+    return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b)
+
+
+def lang_color(color, theme):
+    """GitHub linguist color; swapped for the text color where it would vanish into the page."""
+    if color is None:
+        return THEMES[theme]["fg"]
+    bg = luminance(PAGE_BG[theme])
+    l1, l2 = sorted((luminance(color), bg), reverse=True)
+    return color if (l1 + 0.05) / (l2 + 0.05) >= 1.2 else THEMES[theme]["fg"]
+
+
+PAGE_BG = {"dark": "#0D1117", "light": "#FFFFFF"}
+
+
+def langs_svg(langs, colors, top=8):
     total = sum(langs.values())
     items = [(k, v / total * 100) for k, v in langs.most_common(top)]
     cols, rh, bar_y = 4, 56, 92
@@ -213,16 +234,16 @@ def langs_svg(langs, top=8):
 
     def body(c):
         out = [heading(c, "Languages", "By bytes of code across all repositories")]
-        # proportional bar, segments fade with rank
+        # proportional bar in language colors
         x, shown = 0.0, sum(p for _, p in items)
         for i, (_, pct) in enumerate(items):
             w = W * pct / shown
             out.append(f'<rect x="{x:.1f}" y="{bar_y}" width="{max(w - 3, 2):.1f}" height="6" rx="3" '
-                       f'fill="{c["fg"]}" opacity="{max(0.18, 1 - i * 0.13):.2f}"/>')
+                       f'fill="{lang_color(colors.get(items[i][0]), c["theme"])}"/>')
             x += w
         for i, (name, pct) in enumerate(items):
             x0, y0 = (i % cols) * cw, bar_y + 6 + 32 + (i // cols) * rh
-            out.append(f'<g transform="translate({x0} {y0}) scale({22 / 24})" fill="{c["fg"]}"><path d="{icon_path(name)}"/></g>')
+            out.append(f'<g transform="translate({x0} {y0}) scale({22 / 24})" fill="{lang_color(colors.get(name), c["theme"])}"><path d="{icon_path(name)}"/></g>')
             out.append(text(SANS_MED, name, 16, x0 + 34, y0 + 16, c["fg"], -0.01))
             nx = x0 + 34 + SANS_MED.width(name, 16, -0.01) + 8
             out.append(text(SANS, f"{pct:.1f}%", 15, nx, y0 + 16, c["muted"], -0.005))
@@ -257,9 +278,9 @@ OUT.mkdir(parents=True, exist_ok=True)
 for old in OUT.glob("*.svg"):
     old.unlink()
 
-svg("hero", 340, hero, "dekrezz — Agent infrastructure, MCP tooling and dev tools")
+svg("hero", 240, hero, "Agent infrastructure, MCP tooling and dev tools")
 stats_svg(stats)
-langs_svg(stats["langs"])
+langs_svg(stats["langs"], stats["colors"])
 svg("projects", 65, lambda c: heading(c, "Projects"), "Projects")
 for p in PROJECTS:
     project(*p)
@@ -281,4 +302,4 @@ parts = [
 for name, desc in PROJECTS:
     parts += [f'<a href="https://github.com/{USER}/{name}">\n{pic(f"work-{name.lower()}", f"{name} — {desc}")}\n</a>', ""]
 README.write_text("\n".join(parts))
-print("ok", {k: v for k, v in stats.items() if k != "langs"})
+print("ok", {k: v for k, v in stats.items() if k not in ("langs", "colors")})

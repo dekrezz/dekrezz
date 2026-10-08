@@ -1,18 +1,18 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/hero-dark-453ab067.svg" />
-  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/hero-light-75595c01.svg" width="100%" alt="dekrezz — agent infrastructure, MCP tooling and dev tools" />
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/hero-dark-d16e85e2.svg" />
+  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/hero-light-82aedf6a.svg" width="100%" alt="dekrezz — agent infrastructure, MCP tooling and dev tools" />
 </picture>
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/stats-dark-5adf59c7.svg" />
-  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/stats-light-4af82376.svg" width="100%" alt="Commits, contributions, pull requests and repositories" />
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/stats-dark-4b0d9a83.svg" />
+  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/stats-light-058915f1.svg" width="100%" alt="Commits, contributions, pull requests and repositories" />
 </picture>
 
 <br />
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/languages-dark-cde94252.svg" />
-  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/languages-light-3f90432d.svg" width="100%" alt="Languages" />
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/languages-dark-5549bb38.svg" />
+  <img src="https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets/languages-light-787d2722.svg" width="100%" alt="Languages" />
 </picture>
 
 <br />
