@@ -1,5 +1,9 @@
-"""Render README SVGs with Geist glyphs converted to paths (GitHub can't load webfonts in <img>)."""
+"""Usage: build_svgs.py <geist dist/fonts> <assets dir> <README.md>
+
+Render README SVGs with Geist glyphs converted to paths (GitHub can't load webfonts in <img>)."""
+import hashlib
 import io
+import math
 from html import escape
 import sys
 from pathlib import Path
@@ -11,6 +15,7 @@ from fontTools.ttLib import TTFont
 
 FONTS_DIR = Path(sys.argv[1])
 OUT = Path(sys.argv[2])
+README = Path(sys.argv[3])
 OUT.mkdir(parents=True, exist_ok=True)
 
 W = 830
@@ -83,14 +88,21 @@ def wrap(font, s, size, max_w, tracking=0.0):
     return lines
 
 
-def svg(name, h, body, title):
+FILES = {}  # (name, theme) -> filename; content hash in the name busts GitHub's camo cache
+
+
+def write(name, theme, doc):
+    fn = f"{name}-{theme}-{hashlib.sha1(doc.encode()).hexdigest()[:8]}.svg"
+    (OUT / fn).write_text(doc)
+    FILES[(name, theme)] = fn
+
+
+def svg(name, h, body, title, style=""):
     title = escape(title)
     for theme, c in THEMES.items():
-        content = body(c)
-        (OUT / f"{name}-{theme}.svg").write_text(
-            f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{h}" viewBox="0 0 {W} {h}" '
-            f'role="img" aria-label="{title}"><title>{title}</title>{content}</svg>\n'
-        )
+        write(name, theme,
+              f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{h}" viewBox="0 0 {W} {h}" '
+              f'role="img" aria-label="{title}"><title>{title}</title>{style}{body(c)}</svg>\n')
 
 
 # ---------- logo ----------
@@ -107,7 +119,7 @@ def logo(c):
 
 
 for theme, c in THEMES.items():
-    (OUT / f"logo-{theme}.svg").write_text(
+    write("logo", theme,
         f'<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" role="img" '
         f'aria-label="dekrezz logo"><title>dekrezz</title>{mark(0, 0, 40, c["fg"])}</svg>\n')
 
@@ -129,10 +141,38 @@ def hero(c):
         out.append(text(SANS, line, 18, 0, y, c["muted"], -0.01))
         y += 28
     out.append(f'<rect x="0" y="{y + 20}" width="{W}" height="1" fill="{c["line"]}"/>')
+    out.append(wave(c))
     return "".join(out)
 
 
-svg("hero", 361, hero, "dekrezz — Agent infrastructure, MCP tooling and dev tools")
+# ---------- voice waveform: bars breathe out of phase, like a TTS playhead ----------
+WAVE_N, WAVE_X0, WAVE_X1, WAVE_CY, WAVE_H = 34, 612, W, 186, 112
+WAVE_STYLE = (
+    "<style>"
+    ".b{transform-box:fill-box;transform-origin:center;animation:p 1.8s ease-in-out infinite alternate}"
+    "@keyframes p{0%{transform:scaleY(.25)}100%{transform:scaleY(1)}}"
+    "@media (prefers-reduced-motion:reduce){.b{animation:none}}"
+    "</style>"
+)
+
+
+def wave(c):
+    step = (WAVE_X1 - WAVE_X0) / WAVE_N
+    out = []
+    for i in range(WAVE_N):
+        t = i / (WAVE_N - 1)
+        env = math.sin(math.pi * t) ** 0.8  # taper at both ends
+        amp = 0.35 + 0.65 * abs(math.sin(i * 1.7) * math.cos(i * 0.45))
+        h = max(4.0, WAVE_H * env * amp)
+        x = WAVE_X0 + i * step + (step - 3) / 2
+        delay = -((i * 0.37) % 1.8)
+        op = 0.35 + 0.65 * env
+        out.append(f'<rect class="b" x="{x:.1f}" y="{WAVE_CY - h / 2:.1f}" width="3" height="{h:.1f}" rx="1.5" '
+                   f'fill="{c["fg"]}" opacity="{op:.2f}" style="animation-delay:{delay:.2f}s"/>')
+    return "".join(out)
+
+
+svg("hero", 361, hero, style=WAVE_STYLE, title= "dekrezz — Agent infrastructure, MCP tooling and dev tools")
 
 # ---------- project rows ----------
 PROJECTS = [
@@ -156,4 +196,18 @@ def project(name, desc):
 
 for p in PROJECTS:
     project(*p)
-print("ok", sorted(p.name for p in OUT.iterdir()))
+
+# ---------- README ----------
+BASE = "https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets"
+
+
+def pic(name, alt):
+    return (f'<picture>\n  <source media="(prefers-color-scheme: dark)" srcset="{BASE}/{FILES[(name, "dark")]}" />\n'
+            f'  <img src="{BASE}/{FILES[(name, "light")]}" width="100%" alt="{escape(alt)}" />\n</picture>')
+
+
+parts = [pic("hero", "dekrezz — agent infrastructure, MCP tooling and dev tools"), ""]
+for name, desc in PROJECTS:
+    parts += [f'<a href="https://github.com/dekrezz/{name}">\n{pic(f"work-{name.lower()}", f"{name} — {desc}")}\n</a>', ""]
+README.write_text("\n".join(parts))
+print("ok", sorted(FILES.values()))
