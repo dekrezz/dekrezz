@@ -1,11 +1,18 @@
-"""Usage: build_svgs.py <geist dist/fonts> <assets dir> <README.md>
+"""Usage: GH_TOKEN=... build_svgs.py <geist dist/fonts> <simple-icons icons dir> <assets dir> <README.md>
 
-Render README SVGs with Geist glyphs converted to paths (GitHub can't load webfonts in <img>)."""
+Renders the profile README as SVGs with Geist glyphs converted to paths (GitHub can't load
+webfonts inside <img>). Stats and languages are aggregated over all owned repos, private
+included; only totals are rendered, never repo names. GH_TOKEN needs `repo` + `read:user`.
+"""
+import collections
 import hashlib
 import io
-import math
-from html import escape
+import json
+import os
+import re
 import sys
+import urllib.request
+from html import escape
 from pathlib import Path
 
 import uharfbuzz as hb
@@ -13,24 +20,69 @@ from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.pens.transformPen import TransformPen
 from fontTools.ttLib import TTFont
 
-FONTS_DIR = Path(sys.argv[1])
-OUT = Path(sys.argv[2])
-README = Path(sys.argv[3])
-OUT.mkdir(parents=True, exist_ok=True)
+FONTS_DIR, ICONS_DIR, OUT, README = map(Path, sys.argv[1:5])
+USER = "dekrezz"
+TOKEN = os.environ.get("GH_TOKEN")
+if not TOKEN:
+    sys.exit("GH_TOKEN is not set: stats need a token with `repo` + `read:user` scopes")
 
 W = 830
 THEMES = {
-    "dark": {"fg": "#FAFAFA", "muted": "#8B8B8B", "line": "#262626", "pill_bg": "#FAFAFA", "pill_fg": "#0A0A0A"},
-    "light": {"fg": "#0A0A0A", "muted": "#6B6B6B", "line": "#E5E5E5", "pill_bg": "#0A0A0A", "pill_fg": "#FAFAFA"},
+    "dark": {"fg": "#FAFAFA", "muted": "#8B8B8B", "line": "#262626"},
+    "light": {"fg": "#0A0A0A", "muted": "#6B6B6B", "line": "#E5E5E5"},
 }
 
 
+# ---------- GitHub data ----------
+def gh(path, body=None):
+    req = urllib.request.Request(
+        f"https://api.github.com/{path}",
+        data=json.dumps(body).encode() if body else None,
+        headers={"Authorization": f"Bearer {TOKEN}", "Accept": "application/vnd.github+json"},
+    )
+    with urllib.request.urlopen(req) as r:
+        data = json.load(r)
+    if "errors" in data:
+        raise RuntimeError(f"GitHub API error: {data['errors']}")
+    return data
+
+
+def fetch_stats():
+    repos, cursor = [], None
+    while True:
+        q = """query($c: String) { viewer {
+            repositories(ownerAffiliations: OWNER, first: 100, after: $c) {
+              totalCount pageInfo { hasNextPage endCursor }
+              nodes { isFork languages(first: 20) { edges { size node { name } } } } }
+            contributionsCollection { contributionCalendar { totalContributions } } } }"""
+        v = gh("graphql", {"query": q, "variables": {"c": cursor}})["data"]["viewer"]
+        page = v["repositories"]
+        repos += page["nodes"]
+        if not page["pageInfo"]["hasNextPage"]:
+            break
+        cursor = page["pageInfo"]["endCursor"]
+
+    langs = collections.Counter()
+    for r in repos:
+        if not r["isFork"]:
+            for e in r["languages"]["edges"]:
+                langs[e["node"]["name"]] += e["size"]
+
+    # GraphQL hides private commits as "restricted"; search with a `repo` token counts them.
+    return {
+        "commits": gh(f"search/commits?q=author:{USER}")["total_count"],
+        "contributions": v["contributionsCollection"]["contributionCalendar"]["totalContributions"],
+        "prs": gh(f"search/issues?q=author:{USER}+type:pr")["total_count"],
+        "repos": page["totalCount"],
+        "langs": langs,
+    }
+
+
+# ---------- type ----------
 class Font:
     def __init__(self, path):
-        data = path.read_bytes()
-        self.tt = TTFont(io.BytesIO(data))
-        # harfbuzz can't read woff2; hand it the decompressed sfnt
-        buf = io.BytesIO()
+        self.tt = TTFont(io.BytesIO(path.read_bytes()))
+        buf = io.BytesIO()  # harfbuzz can't read woff2; hand it the decompressed sfnt
         self.tt.flavor = None
         self.tt.save(buf)
         self.hb_font = hb.Font(hb.Face(buf.getvalue()))
@@ -47,8 +99,7 @@ class Font:
 
     def width(self, text, size, tracking=0.0):
         _, pos = self.shape(text)
-        s = size / self.upem
-        return sum(p.x_advance for p in pos) * s + tracking * size * len(pos)
+        return sum(p.x_advance for p in pos) * size / self.upem + tracking * size * len(pos)
 
     def path(self, text, size, x, y, tracking=0.0):
         infos, pos = self.shape(text)
@@ -56,125 +107,131 @@ class Font:
         pen = SVGPathPen(self.glyphs, ntos=lambda v: f"{v:.1f}".rstrip("0").rstrip("."))
         cx = x
         for info, p in zip(infos, pos):
-            name = self.order[info.codepoint]
             t = TransformPen(pen, (s, 0, 0, -s, cx + p.x_offset * s, y - p.y_offset * s))
-            self.glyphs[name].draw(t)
+            self.glyphs[self.order[info.codepoint]].draw(t)
             cx += p.x_advance * s + tracking * size
         return pen.getCommands()
 
 
 SANS = Font(FONTS_DIR / "geist-sans/Geist-Regular.woff2")
 SANS_MED = Font(FONTS_DIR / "geist-sans/Geist-Medium.woff2")
-MONO = Font(FONTS_DIR / "geist-mono/GeistMono-Regular.woff2")
 
 
 def text(font, s, size, x, y, fill, tracking=0.0, anchor="start"):
     if anchor == "end":
         x -= font.width(s, size, tracking)
-    d = font.path(s, size, x, y, tracking)
-    return f'<path fill="{fill}" d="{d}"/>'
+    return f'<path fill="{fill}" d="{font.path(s, size, x, y, tracking)}"/>'
 
 
-def wrap(font, s, size, max_w, tracking=0.0):
-    lines, cur = [], ""
-    for word in s.split(" "):
-        cand = f"{cur} {word}".strip()
-        if cur and font.width(cand, size, tracking) > max_w:
-            lines.append(cur)
-            cur = word
-        else:
-            cur = cand
-    lines.append(cur)
-    return lines
+def rule(y, c):
+    return f'<rect x="0" y="{y}" width="{W}" height="1" fill="{c["line"]}"/>'
 
 
+def heading(c, label, note=None):
+    out = text(SANS_MED, label, 20, 0, 40, c["fg"], -0.02)
+    if note:
+        out += text(SANS, note, 15, W, 40, c["muted"], -0.005, "end")
+    return out + rule(64, c)
+
+
+# ---------- output ----------
 FILES = {}  # (name, theme) -> filename; content hash in the name busts GitHub's camo cache
 
 
-def write(name, theme, doc):
-    fn = f"{name}-{theme}-{hashlib.sha1(doc.encode()).hexdigest()[:8]}.svg"
-    (OUT / fn).write_text(doc)
-    FILES[(name, theme)] = fn
-
-
-def svg(name, h, body, title, style=""):
+def svg(name, h, body, title):
     title = escape(title)
     for theme, c in THEMES.items():
-        write(name, theme,
-              f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{h}" viewBox="0 0 {W} {h}" '
-              f'role="img" aria-label="{title}"><title>{title}</title>{style}{body(c)}</svg>\n')
+        doc = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{h}" viewBox="0 0 {W} {h}" '
+               f'role="img" aria-label="{title}"><title>{title}</title>{body(c)}</svg>\n')
+        fn = f"{name}-{theme}-{hashlib.sha1(doc.encode()).hexdigest()[:8]}.svg"
+        (OUT / fn).write_text(doc)
+        FILES[(name, theme)] = fn
 
 
-# ---------- logo ----------
-def mark(x, y, size, fill):
-    """Monogram 'd': ring + stem, cut from a square grid of `size`."""
-    u = size / 24
-    return (f'<g transform="translate({x} {y}) scale({u})" fill="{fill}">'
-            '<path fill-rule="evenodd" d="M10 6a9 9 0 1 0 0 18a9 9 0 1 0 0-18zm0 4.5a4.5 4.5 0 1 1 0 9a4.5 4.5 0 1 1 0-9z"/>'
-            '<rect x="15" y="0" width="4.5" height="24" rx="0"/></g>')
-
-
-def logo(c):
-    return mark(0, 0, 40, c["fg"]) + text(SANS_MED, "dekrezz", 30, 54, 31, c["fg"], -0.03)
-
-
-for theme, c in THEMES.items():
-    write("logo", theme,
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" role="img" '
-        f'aria-label="dekrezz logo"><title>dekrezz</title>{mark(0, 0, 40, c["fg"])}</svg>\n')
-
-
-# ---------- hero ----------
-HEAD = ["Agent infrastructure,", "MCP tooling & dev tools."]
-HEAD_SIZE, HEAD_TRACK, HEAD_LH = 54, -0.045, 60
-
-
+# ---------- sections ----------
 def hero(c):
-    out = [logo(c), f'<rect x="0" y="68" width="{W}" height="1" fill="{c["line"]}"/>']
+    out = [text(SANS_MED, "dekrezz", 30, 0, 31, c["fg"], -0.03), rule(68, c)]
     y = 156
-    for line in HEAD:
-        out.append(text(SANS, line, HEAD_SIZE, -2, y, c["fg"], HEAD_TRACK))
-        y += HEAD_LH
+    for line in ["Agent infrastructure,", "MCP tooling & dev tools."]:
+        out.append(text(SANS, line, 54, -2, y, c["fg"], -0.045))
+        y += 60
     y += 8
     for line in ["I build tools for coding agents — orchestration, MCP servers, voice and",
-                 "desktop utilities. TypeScript, Rust, Go, Swift, Python."]:
+                 "desktop utilities. Ship fast, verify everything."]:
         out.append(text(SANS, line, 18, 0, y, c["muted"], -0.01))
         y += 28
-    out.append(f'<rect x="0" y="{y + 20}" width="{W}" height="1" fill="{c["line"]}"/>')
-    out.append(wave(c))
     return "".join(out)
 
 
-# ---------- voice waveform: bars breathe out of phase, like a TTS playhead ----------
-WAVE_N, WAVE_X0, WAVE_X1, WAVE_CY, WAVE_H = 34, 612, W, 186, 112
-WAVE_STYLE = (
-    "<style>"
-    ".b{transform-box:fill-box;transform-origin:center;animation:p 1.8s ease-in-out infinite alternate}"
-    "@keyframes p{0%{transform:scaleY(.25)}100%{transform:scaleY(1)}}"
-    "@media (prefers-reduced-motion:reduce){.b{animation:none}}"
-    "</style>"
-)
+def stats_svg(st):
+    cells = [
+        (f"{st['commits']:,}", "Commits"),
+        (f"{st['contributions']:,}", "Contributions this year"),
+        (f"{st['prs']:,}", "Pull requests"),
+        (f"{st['repos']:,}", "Repositories"),
+    ]
+    cw = W / len(cells)
+
+    def body(c):
+        out = [heading(c, "Numbers", "Public and private, combined")]
+        for i, (num, label) in enumerate(cells):
+            x = i * cw + (24 if i else 0)
+            if i:
+                out.append(f'<rect x="{i * cw:.1f}" y="64" width="1" height="120" fill="{c["line"]}"/>')
+            out.append(text(SANS, num, 48, x - 2, 136, c["fg"], -0.045))
+            out.append(text(SANS, label, 15, x, 166, c["muted"], -0.005))
+        out.append(rule(184, c))
+        return "".join(out)
+
+    svg("stats", 185, body, "Numbers: " + ", ".join(f"{n} {l.lower()}" for n, l in cells) + " (public and private combined)")
 
 
-def wave(c):
-    step = (WAVE_X1 - WAVE_X0) / WAVE_N
-    out = []
-    for i in range(WAVE_N):
-        t = i / (WAVE_N - 1)
-        env = math.sin(math.pi * t) ** 0.8  # taper at both ends
-        amp = 0.35 + 0.65 * abs(math.sin(i * 1.7) * math.cos(i * 0.45))
-        h = max(4.0, WAVE_H * env * amp)
-        x = WAVE_X0 + i * step + (step - 3) / 2
-        delay = -((i * 0.37) % 1.8)
-        op = 0.35 + 0.65 * env
-        out.append(f'<rect class="b" x="{x:.1f}" y="{WAVE_CY - h / 2:.1f}" width="3" height="{h:.1f}" rx="1.5" '
-                   f'fill="{c["fg"]}" opacity="{op:.2f}" style="animation-delay:{delay:.2f}s"/>')
-    return "".join(out)
+# GitHub language name -> simple-icons slug
+ICON = {
+    "TypeScript": "typescript", "JavaScript": "javascript", "Swift": "swift", "Shell": "gnubash",
+    "CSS": "css", "Rust": "rust", "HTML": "html5", "PLpgSQL": "postgresql", "Go": "go",
+    "Python": "python", "Ruby": "ruby", "Makefile": "gnu", "Kotlin": "kotlin", "C": "c",
+    "C++": "cplusplus", "Lua": "lua", "Dockerfile": "docker", "Vue": "vuedotjs", "Svelte": "svelte",
+    "Zig": "zig", "Java": "openjdk", "C#": "dotnet", "PHP": "php", "Dart": "dart", "Nix": "nixos",
+}
 
 
-svg("hero", 361, hero, style=WAVE_STYLE, title= "dekrezz — Agent infrastructure, MCP tooling and dev tools")
+def icon_path(lang):
+    slug = ICON.get(lang)
+    if slug is None:
+        raise KeyError(f"no icon mapped for language {lang!r}: add it to ICON")
+    return re.search(r'<path d="([^"]+)"', (ICONS_DIR / f"{slug}.svg").read_text()).group(1)
 
-# ---------- project rows ----------
+
+def langs_svg(langs, top=8):
+    total = sum(langs.values())
+    items = [(k, v / total * 100) for k, v in langs.most_common(top)]
+    cols, rh, bar_y = 4, 56, 92
+    cw = W / cols
+    rows = -(-len(items) // cols)
+    h = bar_y + 6 + 32 + rows * rh
+
+    def body(c):
+        out = [heading(c, "Languages", "By bytes of code across all repositories")]
+        # proportional bar, segments fade with rank
+        x, shown = 0.0, sum(p for _, p in items)
+        for i, (_, pct) in enumerate(items):
+            w = W * pct / shown
+            out.append(f'<rect x="{x:.1f}" y="{bar_y}" width="{max(w - 3, 2):.1f}" height="6" rx="3" '
+                       f'fill="{c["fg"]}" opacity="{max(0.18, 1 - i * 0.13):.2f}"/>')
+            x += w
+        for i, (name, pct) in enumerate(items):
+            x0, y0 = (i % cols) * cw, bar_y + 6 + 32 + (i // cols) * rh
+            out.append(f'<g transform="translate({x0} {y0}) scale({22 / 24})" fill="{c["fg"]}"><path d="{icon_path(name)}"/></g>')
+            out.append(text(SANS_MED, name, 16, x0 + 34, y0 + 16, c["fg"], -0.01))
+            nx = x0 + 34 + SANS_MED.width(name, 16, -0.01) + 8
+            out.append(text(SANS, f"{pct:.1f}%", 15, nx, y0 + 16, c["muted"], -0.005))
+        out.append(rule(h - 1, c))
+        return "".join(out)
+
+    svg("languages", h, body, "Languages: " + ", ".join(f"{n} {p:.1f}%" for n, p in items))
+
+
 PROJECTS = [
     ("FreeDeepseekAPI", "DeepSeek as an API for your apps and coding agents, no bills."),
     ("updatetools", "One command to update everything on your Mac, without closing apps."),
@@ -189,16 +246,25 @@ def project(name, desc):
             text(SANS, desc, 15, 0, 66, c["muted"], -0.005),
             f'<path d="M{ax - 11} 38 L{ax} 27 M{ax - 8} 27 L{ax} 27 L{ax} 35" '
             f'stroke="{c["fg"]}" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
-            f'<rect x="0" y="91" width="{W}" height="1" fill="{c["line"]}"/>',
+            rule(91, c),
         ])
     svg(f"work-{name.lower()}", 92, body, f"{name} — {desc}")
 
 
+# ---------- build ----------
+stats = fetch_stats()
+OUT.mkdir(parents=True, exist_ok=True)
+for old in OUT.glob("*.svg"):
+    old.unlink()
+
+svg("hero", 340, hero, "dekrezz — Agent infrastructure, MCP tooling and dev tools")
+stats_svg(stats)
+langs_svg(stats["langs"])
+svg("projects", 65, lambda c: heading(c, "Projects"), "Projects")
 for p in PROJECTS:
     project(*p)
 
-# ---------- README ----------
-BASE = "https://raw.githubusercontent.com/dekrezz/dekrezz/main/assets"
+BASE = f"https://raw.githubusercontent.com/{USER}/{USER}/main/assets"
 
 
 def pic(name, alt):
@@ -206,8 +272,13 @@ def pic(name, alt):
             f'  <img src="{BASE}/{FILES[(name, "light")]}" width="100%" alt="{escape(alt)}" />\n</picture>')
 
 
-parts = [pic("hero", "dekrezz — agent infrastructure, MCP tooling and dev tools"), ""]
+parts = [
+    pic("hero", "dekrezz — agent infrastructure, MCP tooling and dev tools"), "",
+    pic("stats", "Commits, contributions, pull requests and repositories"), "", "<br />", "",
+    pic("languages", "Languages"), "", "<br />", "",
+    pic("projects", "Projects"), "",
+]
 for name, desc in PROJECTS:
-    parts += [f'<a href="https://github.com/dekrezz/{name}">\n{pic(f"work-{name.lower()}", f"{name} — {desc}")}\n</a>', ""]
+    parts += [f'<a href="https://github.com/{USER}/{name}">\n{pic(f"work-{name.lower()}", f"{name} — {desc}")}\n</a>', ""]
 README.write_text("\n".join(parts))
-print("ok", sorted(FILES.values()))
+print("ok", {k: v for k, v in stats.items() if k != "langs"})
