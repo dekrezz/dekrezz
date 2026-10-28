@@ -196,6 +196,7 @@ ICON = {
     "Python": "python", "Ruby": "ruby", "Makefile": "gnu", "Kotlin": "kotlin", "C": "c",
     "C++": "cplusplus", "Lua": "lua", "Dockerfile": "docker", "Vue": "vuedotjs", "Svelte": "svelte",
     "Zig": "zig", "Java": "openjdk", "C#": "dotnet", "PHP": "php", "Dart": "dart", "Nix": "nixos",
+    "Elixir": "elixir",
 }
 
 
